@@ -14,8 +14,7 @@ class ConverterHTTPHandler(server.SimpleHTTPRequestHandler):
     converter = ConverterClient()
 
     def do_GET(self):
-        currencies = self.converter.get_currencies(self.path)
-
+        currencies_data = self.converter.get_currencies_dict(self.path)
         self.send_response(200)
         self.send_header("Content-type", "application/json")
         self.end_headers()

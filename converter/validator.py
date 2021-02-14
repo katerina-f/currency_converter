@@ -1,11 +1,12 @@
 """ Module implemented validation params list from request query """
+from typing import List
 
 
 class ValidationError(Exception):
-    pass
+    """ Custom exception class for validation errors """
 
 
-def validate_params_list(params: list) -> list:
+def validate_params_list(params: List[str]) -> List[str]:
 
     """
     Function checking that params match this template :
