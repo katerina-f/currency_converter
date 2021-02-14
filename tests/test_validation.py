@@ -1,13 +1,13 @@
 # internal modules
-from datetime import datetime
-import json
 from unittest import TestCase, main
-from unittest.mock import Mock, MagicMock, patch, call, create_autospec
 
 # project modules
 from converter.validator import validate_params_list, ValidationError
 
-from .test_data import *
+from .test_data import wrong_length_params, \
+                       wrong_name_params, \
+                       wrong_syntax_params, \
+                       right_params
 
 
 class TestValidator(TestCase):
@@ -19,7 +19,7 @@ class TestValidator(TestCase):
                     validate_params_list(params_list)
 
                 self.assertEqual(
-                    f"It needs to be exactly two params in query, given {len(params_list)}",
+                    f"It needs to be exactly three params in query, given {len(params_list)}",
                     str(err.exception)
                 )
 
@@ -29,7 +29,7 @@ class TestValidator(TestCase):
                 with self.assertRaises(ValidationError) as err:
                     validate_params_list(params_list)
 
-                self.assertEqual(f"Params need to be 'from' and 'to', given: {params_list}",
+                self.assertEqual(f"Params need to be 'from', 'to' and 'value', given: {params_list}",
                                  str(err.exception))
 
     def test_validate_params_list_syntax(self):
