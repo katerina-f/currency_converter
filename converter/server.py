@@ -4,7 +4,7 @@ from http import server
 from urllib.parse import urlparse
 
 from logger import get_custom_logger
-from .validation import validate_params_list, ValidationError
+from .validator import validate_params_list, ValidationError
 
 
 logger = get_custom_logger(__name__)
