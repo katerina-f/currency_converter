@@ -75,12 +75,14 @@ class ConverterClient:
             logger.error(str(err))
             return str(err)
 
-    def _count_result_value(self, value: str, converting_type: str) -> Union[float, str]:
+    def _count_result_value(self, value: float, converting_type: str) -> Union[float, str]:
         try:
             if converting_type == "RUB > USD":
                 result = value / self.usd_value
             elif converting_type == "USD > RUB":
                 result = value * self.usd_value
+            else:
+                raise TypeError ("Invalid converting type value! %s" % converting_type)
             return round(result, 2)
         except TypeError as err:
             msg = "Invalid type of USD value! %s" % str(err)

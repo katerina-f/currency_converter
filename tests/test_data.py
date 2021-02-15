@@ -25,6 +25,16 @@ wrong_values_params = [
     {"from": True, "to": "RUB", "value": "test"}
 ]
 
+wrong_params_for_count = [
+    ("10", "test"),
+    ("test", "USD > RUB")
+]
+
+right_values_params = [
+    {"from": "RUB", "to": "USD", "value": "100"},
+    {"from": "USD", "to": "RUB", "value": "10.0"},
+]
+
 right_params = ["from=RUB", "to=USD", "value=20.2"]
 
 
