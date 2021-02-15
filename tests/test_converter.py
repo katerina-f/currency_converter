@@ -14,12 +14,13 @@ class TestConverterClient(TestCase):
         self.obj = ConverterClient()
 
     def test_get_currencies(self):
-        self.assertEqual(self.obj.get_currencies("/?from=RUB&to=USD&value=20"), {"from": "RUB", "to": "USD", "value": "20"})
+        self.obj.usd_value = 10
+        self.assertEqual(self.obj.get_currencies_dict("/?from=RUB&to=USD&value=20"), {"converting_type": "RUB > USD", "start_value": float(20), "result_value": float(2)})
 
     def test_get_currencies_with_exception(self):
-        self.assertTrue(self.obj.get_currencies("/%from=RUB&to=USD&value=10") is None)
-        self.assertTrue(self.obj.get_currencies("/?from=RUB&to=USD*value=") is None)
-        self.assertTrue(self.obj.get_currencies("/fromRUB&to&USD") is None)
+        self.assertTrue(isinstance(self.obj.get_currencies_dict("/%from=RUB&to=USD&value=10"), str))
+        self.assertTrue(isinstance(self.obj.get_currencies_dict("/?from=RUB&to=USD*value="), str))
+        self.assertTrue(isinstance(self.obj.get_currencies_dict("/fromRUB&to&USD"), str))
 
 
 if __name__ == "__main__":

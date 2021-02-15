@@ -1,5 +1,8 @@
 """ Module implemented validation params list from request query """
-from typing import List
+from typing import List, Dict
+
+
+CURRENCIES = ["USD", "RUB"]
 
 
 class ValidationError(Exception):
@@ -25,3 +28,26 @@ def validate_params_list(params: List[str]) -> List[str]:
         raise ValidationError (f"Params need to be 'from', 'to' and 'value', given: {params}")
 
     return params
+
+
+def validate_currencies_params(params: Dict[str, str]) -> Dict[str, str]:
+    if all((params["from"] in CURRENCIES,
+            params["to"] in CURRENCIES)) and \
+            params["from"] != params["to"]:
+        return params
+
+    else:
+        msg = "Incorrect currencies types! \
+               Must be RUB and USD, given %s, %s" \
+               % (params["from"], params["to"])
+        raise ValidationError (msg)
+
+
+def validate_value_param(value: str) -> float:
+    if not isinstance(value, str):
+        raise ValidationError ("Invalid type of currency value! %s" % type(value))
+
+    try:
+        return float(value)
+    except ValueError as err:
+        raise ValidationError ("Invalid type of currency value! %s" % str(err))

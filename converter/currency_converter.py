@@ -7,7 +7,10 @@ from urllib import request
 
 #project modules
 from logger import get_custom_logger
-from .validator import validate_params_list, ValidationError
+from .validator import validate_params_list, \
+                       validate_currencies_params, \
+                       validate_value_param, \
+                       ValidationError
 
 
 logger = get_custom_logger(__name__)
@@ -60,35 +63,19 @@ class ConverterClient:
 
     def _get_converted_result_dict(self, currencies_data: Dict[str, str]) \
                                   -> Union[Dict[str, Union[str, int, float]], str]:
-        result = {"start_value": currencies_data["value"]}
-
-        if all((currencies_data["from"] in self.currencies,
-                currencies_data["to"] in self.currencies)):
-            result["converting_type"] = f"{currencies_data['from']} > {currencies_data['to']}"
-        else:
-            msg = "Incorrect currencies types! \
-                Must be RUB and USD, given %s, %s" \
-                % (currencies_data["from"], currencies_data["to"])
-            logger.error(msg)
-            return msg
-
-        converting_result = self._count_result_value(currencies_data["value"],
-                                                 result["converting_type"])
-
-        if isinstance(converting_result, str):
-            return converting_result
-
-        result["result_value"] = converting_result
-        return result
+        result = {}
+        try:
+            data = validate_currencies_params(currencies_data)
+            value = validate_value_param(currencies_data["value"])
+            result["converting_type"] = f'{data["from"]} > {data["to"]}'
+            result["start_value"] = value
+            result["result_value"] = self._count_result_value(value, result["converting_type"])
+            return result
+        except ValidationError as err:
+            logger.error(str(err))
+            return str(err)
 
     def _count_result_value(self, value: str, converting_type: str) -> Union[float, str]:
-        try:
-            value = float(value)
-        except ValueError as err:
-            msg = "Invalid type of currency value! %s" % str(err)
-            logger.error(msg)
-            return msg
-
         try:
             if converting_type == "RUB > USD":
                 result = value / self.usd_value
@@ -97,5 +84,4 @@ class ConverterClient:
             return round(result, 2)
         except TypeError as err:
             msg = "Invalid type of USD value! %s" % str(err)
-            logger.error(msg)
             return msg

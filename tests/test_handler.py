@@ -9,7 +9,7 @@ from .test_data import MockRequest
 
 class TestHTTPServer(TestCase):
 
-    @patch("converter.currency_converter.ConverterClient.get_currencies")
+    @patch("converter.currency_converter.ConverterClient.get_currencies_dict")
     def test_do_GET(self, get_currencies):
         self.obj = ConverterHTTPHandler(MockRequest(b'/'), ("", 80), None)
         get_currencies.assert_called_once()

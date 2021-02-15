@@ -19,6 +19,12 @@ wrong_name_params = [
     ["from=RUB", "to=USD", "vale=20.2"],
 ]
 
+wrong_values_params = [
+    {"from": "RUB", "to": "RUB", "value": "10,0"},
+    {"from": "USD", "to": "test", "value": False},
+    {"from": True, "to": "RUB", "value": "test"}
+]
+
 right_params = ["from=RUB", "to=USD", "value=20.2"]
 
 
