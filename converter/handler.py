@@ -9,6 +9,9 @@ from .currency_converter import ConverterClient
 
 
 class ConverterHTTPHandler(server.SimpleHTTPRequestHandler):
+
+    """ Simple HTTP server for getting currencies values """
+
     converter = ConverterClient()
 
     def do_GET(self):
